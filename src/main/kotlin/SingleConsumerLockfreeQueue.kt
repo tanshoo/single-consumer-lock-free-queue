@@ -56,12 +56,20 @@ class SingleConsumerLockfreeQueue<T> {
         return nextNode.value
     }
 
-        /**
-         *  Checks if the queue is empty.
-         *
-         *  @return true if the queue is empty, false otherwise
-         */
-        fun isEmpty(): Boolean {
-            return head.value.next.value == null
-        }
+    /**
+     * Returns the element at the front of the queue without removing it
+     * or null if the queue is empty.
+     */
+    fun peek(): T? {
+        return head.value.next.value?.value
+    }
+
+    /**
+     *  Checks if the queue is empty.
+     *
+     *  @return true if the queue is empty, false otherwise
+     */
+    fun isEmpty(): Boolean {
+        return head.value.next.value == null
+    }
 }

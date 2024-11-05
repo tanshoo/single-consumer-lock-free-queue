@@ -14,6 +14,9 @@ class SingleConsumerLockfreeQueueTest {
     fun dequeue() = queue.dequeue()
 
     @Operation
+    fun peek() = queue.peek()
+
+    @Operation
     fun isEmpty() = queue.isEmpty()
 
     @Test
