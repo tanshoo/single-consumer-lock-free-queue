@@ -7,13 +7,15 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:atomicfu:0.20.2")
-    testImplementation("org.jetbrains.kotlinx:lincheck:2.12")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    implementation("org.jetbrains.kotlinx:atomicfu:0.26.0")
+    testImplementation("org.jetbrains.kotlinx:lincheck:2.34")
+    testImplementation("junit:junit:4.13.1")
 }
 
-tasks.test {
-    useJUnitPlatform()
+tasks {
+    test {
+        useJUnit()
+    }
 }
 
 kotlin {

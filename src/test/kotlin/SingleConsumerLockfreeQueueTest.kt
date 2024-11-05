@@ -1,72 +1,26 @@
-import kotlinx.coroutines.*
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
-
+import org.jetbrains.kotlinx.lincheck.annotations.*
+import org.jetbrains.kotlinx.lincheck.check
+import org.jetbrains.kotlinx.lincheck.strategy.managed.modelchecking.*
+import org.jetbrains.kotlinx.lincheck.strategy.stress.*
+import org.junit.*
 
 class SingleConsumerLockfreeQueueTest {
     private val queue = SingleConsumerLockfreeQueue<Int>()
-    
-    fun enqueue(value: Int) = queue.enqueue(value)
 
-    fun dequeue(): Int? = queue.dequeue()
+    @Operation
+    fun enqueue(value: Int)  = queue.enqueue(value)
 
-    // Basic tests
-    @Test
-    fun testEnqueueDequeue() {
-        repeat(10) { i -> queue.enqueue(i) }
-        repeat(10) { i -> assertEquals(i, queue.dequeue()) }
-        assertNull(queue.dequeue())
-    }
+    @Operation(nonParallelGroup = "consumers")
+    fun dequeue() = queue.dequeue()
+
+    @Operation
+    fun isEmpty() = queue.isEmpty()
 
     @Test
-    fun testDequeueReturnsNullWhenEmpty() {
-        val queue = SingleConsumerLockfreeQueue<Int>()
-        assertNull(queue.dequeue())
-    }
-
-    // Concurrency test with multiple producers
-    // Check that all elements are enqueued and dequeued
-    @Test
-    fun testConcurrency() = runBlocking {
-        val jobs = List(10) {
-            launch {
-                repeat(10) { i -> queue.enqueue(i) }
-            }
-        }
-        jobs.forEach { it.join() }
-
-        val dequeueResults = mutableListOf<Int?>()
-        repeat(100) {
-            dequeueResults.add(queue.dequeue())
-        }
-
-        assertEquals(100, dequeueResults.size)
-    }
-
+    fun stressTest() = StressOptions().check(this::class)
 
     @Test
-    fun concurrentEnqueueDequeueWithContention() = runBlocking {
-        val enqueueJobs = List(100) {
-            launch {
-                repeat(100) { i -> queue.enqueue(i) }
-            }
-        }
-
-        val dequeueJobs = List(100) {
-            launch {
-                repeat(100) {
-                    queue.dequeue()
-                }
-            }
-        }
-
-        enqueueJobs.forEach { it.join() }
-        dequeueJobs.forEach { it.join() }
-
-        // Check if the queue is empty after all operations
-        assertTrue(queue.isEmpty())
-    }
-
+    fun modelCheckingTest() = ModelCheckingOptions()
+        .checkObstructionFreedom()
+        .check(this::class)
 }
