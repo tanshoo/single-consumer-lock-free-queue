@@ -9,7 +9,9 @@ import kotlinx.atomicfu.AtomicRef
 class SingleConsumerLockfreeQueue<T> {
     /**
      * Queue node, represents an element in the queue.
-     * Contains the value of the element and a reference to the next node.
+     *
+     * @param value the value of the element
+     * @param next reference to the next node
      */
     private class Node<T>(
         val value: T?,
@@ -59,15 +61,18 @@ class SingleConsumerLockfreeQueue<T> {
     /**
      * Returns the element at the front of the queue without removing it
      * or null if the queue is empty.
+     *
+     * @return the element at the front of the queue
+     * or null if the queue is empty
      */
     fun peek(): T? {
         return head.value.next.value?.value
     }
 
     /**
-     *  Checks if the queue is empty.
+     * Checks if the queue is empty.
      *
-     *  @return true if the queue is empty, false otherwise
+     * @return true if the queue is empty, false otherwise
      */
     fun isEmpty(): Boolean {
         return head.value.next.value == null
