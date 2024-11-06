@@ -1,3 +1,5 @@
+package io.github.tanshoo.singleConsumerLockfreeQueue
+
 import org.jetbrains.kotlinx.lincheck.annotations.*
 import org.jetbrains.kotlinx.lincheck.check
 import org.jetbrains.kotlinx.lincheck.strategy.managed.modelchecking.*

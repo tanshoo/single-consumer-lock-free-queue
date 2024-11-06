@@ -1,3 +1,5 @@
+package io.github.tanshoo.singleConsumerLockfreeQueue
+
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.AtomicRef
 
